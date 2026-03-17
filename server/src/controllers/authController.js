@@ -1,10 +1,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is required but not set');
+}
+
 const createToken = (user) =>
   jwt.sign(
     { id: user._id, email: user.email, role: user.role, name: user.name },
-    process.env.JWT_SECRET || 'secret',
+    JWT_SECRET,
     { expiresIn: '7d' }
   );
 
